@@ -23,6 +23,7 @@ class ContactListItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(48),
               image: DecorationImage(
+                fit: BoxFit.cover,
                 image: model.image == null ? 
                 AssetImage('assets/images/profile-picture.png'): FileImage(
                   File(model.image),
@@ -37,7 +38,9 @@ class ContactListItem extends StatelessWidget {
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => DetailsView(),
+                  builder: (context) => DetailsView(
+                    id: model.id,
+                  ),
                 ),
               );
             }, 
