@@ -1,13 +1,17 @@
+import 'package:camera/camera.dart';
 import 'package:contact/android/views/address.view.dart';
+import 'package:contact/android/views/crop-picture.view.dart';
 import 'package:contact/android/views/editor-contact.view.dart';
 import 'package:contact/android/views/home.view.dart';
 import 'package:contact/android/views/loading.view.dart';
+import 'package:contact/android/views/take-picture.view.dart';
 import 'package:contact/models/contact.model.dart';
 import 'package:contact/repositories/contact.repository.dart';
 import 'package:contact/shared/widgets/contact-details-description.widget.dart';
 import 'package:contact/shared/widgets/contact-details-image.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 
 class DetailsView extends StatefulWidget {
@@ -66,6 +70,35 @@ class _DetailsViewState extends State<DetailsView> {
 
   onError(err) {
     print(err);
+  }
+
+  takePicture() async{
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePictureView(
+          camera: firstCamera,
+        ),
+      ),
+    ).then((imagePath){
+      cropPicture(imagePath);
+    });
+  }
+
+  cropPicture(path){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CropPictureView(
+          path: path,
+        ),
+      ),
+    ).then((imagePath){
+      updateImage(imagePath);
+    });
   }
 
   updateImage(path) async {
@@ -147,7 +180,7 @@ class _DetailsViewState extends State<DetailsView> {
                 ),
               ),
                FlatButton(
-                 onPressed: (){},
+                 onPressed: takePicture,
                  color: Theme.of(context).primaryColor,
                  shape: CircleBorder(
                    side: BorderSide.none,
