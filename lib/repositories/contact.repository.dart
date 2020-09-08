@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ContactRepository {
+  // conexao com o bd
   Future<Database> _getDatabase() async {
     return openDatabase(
       join(await getDatabasesPath(), DATABASE_NAME),
